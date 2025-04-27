@@ -57,7 +57,7 @@ window.onload = async function () {
 };
 
 function connectWebSocket() {
-  socket = new WebSocket("ws://localhost:8000");
+  socket = new WebSocket(`wss://${window.location.host}`);
 
   socket.onopen = () => {
     socket.send(JSON.stringify({ type: "connect", username, token: authToken }));
