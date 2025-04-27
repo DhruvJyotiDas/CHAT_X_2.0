@@ -1,4 +1,3 @@
-
 let socket;
 let username;
 let authToken;
@@ -9,6 +8,9 @@ let peerConnection;
 const configuration = {
   iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
 };
+
+// 🟰 VERY IMPORTANT 🟰
+const baseUrl = window.location.origin;
 
 // DOM Elements
 const callBtn = document.getElementById("call-btn");
@@ -39,7 +41,7 @@ window.onload = async function () {
   document.querySelector(".welcome").textContent = `Welcome, ${username}`;
 
   try {
-    const res = await fetch("/login", {
+    const res = await fetch(`${baseUrl}/login`, {  // ✅ Updated
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username, password }),
@@ -83,6 +85,7 @@ async function handleSocketMessage(event) {
           selectedRecipient = user;
           document.getElementById("chat-title").textContent = user;
           document.getElementById("chat-box").innerHTML = "";
+
           const callBtn = document.getElementById("call-btn");
           if (callBtn) {
             callBtn.onclick = async () => {
@@ -106,7 +109,7 @@ async function handleSocketMessage(event) {
           }
 
           try {
-            const res = await fetch(`/history?user=${username}&peer=${user}`);
+            const res = await fetch(`${baseUrl}/history?user=${username}&peer=${user}`); // ✅ Updated
             const messages = await res.json();
             messages.forEach(renderMessage);
           } catch (err) {
@@ -138,7 +141,6 @@ async function handleSocketMessage(event) {
       createPeerConnection();
       addLocalTracks();
 
-      // ✅ Correct: Use the offer from WebSocket data
       await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
 
       const answer = await peerConnection.createAnswer();
@@ -161,7 +163,6 @@ async function handleSocketMessage(event) {
   }
 
   else if (data.type === "call-answer") {
-    // ✅ When caller receives the answer, set it as remote description
     await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
   }
 
@@ -174,12 +175,9 @@ async function handleSocketMessage(event) {
   }
 }
 
-
-
-
 async function summarizeMessage(originalText) {
   try {
-    const res = await fetch("https://f686-2401-4900-634f-e92e-4924-7f86-639a-3db8.ngrok-free.app/summarize", {  // 👈 use your Mac IP here
+    const res = await fetch("https://f686-2401-4900-634f-e92e-4924-7f86-639a-3db8.ngrok-free.app/summarize", {  // ✅ No change yet
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: originalText }),
@@ -192,7 +190,6 @@ async function summarizeMessage(originalText) {
     return originalText;
   }
 }
-
 
 function createPeerConnection() {
   peerConnection = new RTCPeerConnection(configuration);
@@ -256,7 +253,6 @@ endCallBtn?.addEventListener("click", () => {
   videoPopup.classList.add("hidden");
 });
 
-// Emoji & Chat UI
 function renderMessage({ sender, message, timestamp }) {
   const templateId = sender === username ? "message-template-sent" : "message-template-received";
   const template = document.getElementById(templateId);
@@ -271,7 +267,6 @@ function renderMessage({ sender, message, timestamp }) {
   const time = new Date(timestamp || Date.now()).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   clone.querySelector(".meta").textContent = time;
 
-  // 🧠 Add toggle logic
   let isSummarized = false;
   let originalText = message;
   let summarizedText = "";
@@ -289,19 +284,16 @@ function renderMessage({ sender, message, timestamp }) {
         summarizeBtn.innerText = "Retry";
       }
     } else {
-      // toggle
       isSummarized = !isSummarized;
       contentEl.textContent = isSummarized ? summarizedText : originalText;
       summarizeBtn.innerText = isSummarized ? "Show Original" : "Summarize";
     }
   });
-  
 
   const box = document.getElementById("chat-box");
   box.appendChild(clone);
   box.scrollTop = box.scrollHeight;
 }
-
 
 function updateEmoji(mood) {
   const emojiMap = {
