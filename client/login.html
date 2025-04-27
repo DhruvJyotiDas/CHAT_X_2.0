@@ -164,75 +164,76 @@
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-header">
-            <h1>Sign In</h1>
-            <p>Welcome back! Please login to your account</p>
-        </div>
-
-        <form class="login-form">
-            <div class="form-group">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" placeholder="Enter your username" required>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
-            </div>
-
-            <button type="submit" class="submit-btn">Login</button>
-
-            <div class="register-link">
-                <p>Don't have an account? <a href="register.html">Register</a></p>
-            </div>
-        </form>
+  <div class="login-container">
+    <div class="login-header">
+      <h1>Sign In</h1>
+      <p>Welcome back! Please login to your account</p>
     </div>
 
-    <!-- Floating Animated Icons -->
-    <div class="floating-icons">
-        <span class="floating-icon">💻</span>
-        <span class="floating-icon">📷</span>
-        <span class="floating-icon">🎧</span>
-        <span class="floating-icon">☕</span>
-        <span class="floating-icon">📚</span>
-    </div>
-    <script>
-        document.querySelector(".login-form").addEventListener("submit", async function(event) {
-          event.preventDefault();
-        
-          const username = document.getElementById("username").value;
-          const password = document.getElementById("password").value;
-        
-          try {
-            const res = await fetch("http://localhost:8000/login", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ username, password })
-            });
-        
-            const data = await res.json();
-            console.log("Login response:", data);
-        
-            if (res.ok) {
-              alert("Login successful!");
-        
-              // Store login info for index.html to auto-connect
-              localStorage.setItem("username", username);
-              localStorage.setItem("password", password);
-        
-              // Redirect to chat UI
-              window.location.href = "index.html";
-            } else {
-              alert(data.error || "Login failed.");
-            }
-          } catch (error) {
-            console.error("Login error:", error);
-            alert("Failed to connect to server.");
-          }
+    <form class="login-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="Enter your username" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+      </div>
+
+      <button type="submit" class="submit-btn">Login</button>
+
+      <div class="register-link">
+        <p>Don't have an account? <a href="register.html">Register</a></p>
+      </div>
+    </form>
+  </div>
+
+  <!-- Floating Animated Icons -->
+  <div class="floating-icons">
+    <span class="floating-icon">💻</span>
+    <span class="floating-icon">📷</span>
+    <span class="floating-icon">🎧</span>
+    <span class="floating-icon">☕</span>
+    <span class="floating-icon">📚</span>
+  </div>
+
+  <script>
+    const baseUrl = window.location.origin; // ✅ ADD THIS LINE
+
+    document.querySelector(".login-form").addEventListener("submit", async function(event) {
+      event.preventDefault();
+
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        const res = await fetch(`${baseUrl}/login`, {   // ✅ FIXED URL
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
         });
-        </script>
-        
-        
+
+        const data = await res.json();
+        console.log("Login response:", data);
+
+        if (res.ok) {
+          alert("Login successful!");
+
+          // Store login info for index.html to auto-connect
+          localStorage.setItem("username", username);
+          localStorage.setItem("password", password);
+
+          // Redirect to chat UI
+          window.location.href = "index.html";
+        } else {
+          alert(data.error || "Login failed.");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        alert("Failed to connect to server.");
+      }
+    });
+  </script>
 </body>
 </html>
