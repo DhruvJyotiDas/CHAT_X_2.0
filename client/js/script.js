@@ -87,15 +87,15 @@ async function handleSocketMessage(event) {
           if (callBtn) {
             callBtn.onclick = async () => {
               if (!selectedRecipient) return alert("Select a user first.");
-            
+
               await startLocalStream();
               createPeerConnection();
               addLocalTracks();
               videoPopup.classList.remove("hidden");
-            
+
               const offer = await peerConnection.createOffer();
               await peerConnection.setLocalDescription(offer);
-            
+
               socket.send(JSON.stringify({
                 type: "call-offer",
                 from: username,
@@ -103,7 +103,6 @@ async function handleSocketMessage(event) {
                 offer: offer
               }));
             };
-            
           }
 
           try {
@@ -128,95 +127,41 @@ async function handleSocketMessage(event) {
     showTypingIndicator(data.sender);
   }
 
-  else if (data.type === "call-request") {
-    selectedRecipient = data.from;
-    incomingCallText.textContent = `${data.from} is calling you...`;
-    incomingCallPopup.classList.remove("hidden");
-
-    acceptCallBtn.onclick = async () => {
-      incomingCallPopup.classList.add("hidden");
-      await startLocalStream();
-    
-      createPeerConnection();
-      addLocalTracks();
-    
-      // Set remote offer (from caller)
-      await peerConnection.setRemoteDescription(new RTCSessionDescription(remoteOffer));
-    
-      // Create and send the answer
-      const answer = await peerConnection.createAnswer();
-      await peerConnection.setLocalDescription(answer);
-    
-      socket.send(JSON.stringify({
-        type: "call-accepted",
-        from: username,
-        to: selectedRecipient,
-        answer: answer
-      }));
-    
-      videoPopup.classList.remove("hidden");
-    };
-    
-
-    declineCallBtn.onclick = () => {
-      incomingCallPopup.classList.add("hidden");
-      socket.send(JSON.stringify({ type: "call-declined", from: username, to: data.from }));
-    };
-  }
-
-  else if (data.type === "call-accepted") {
-    console.log("✅ Call accepted by", data.from);
-  
-    // 1. Show caller's video box
-    videoPopup.classList.remove("hidden");
-  
-    // 2. Start local camera stream
-    await startLocalStream();
-  
-    // 3. Create peer connection & add local stream
-    createPeerConnection();     // This should initialize your RTCPeerConnection
-    addLocalTracks();           // This adds camera/mic tracks to the peerConnection
-  
-    // 4. Set remote answer
-    await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
-  }
-  
-
   else if (data.type === "call-offer") {
     incomingCallPopup.classList.remove("hidden");
     incomingCallText.textContent = `${data.from} is calling you...`;
-  
+
     acceptCallBtn.onclick = async () => {
       incomingCallPopup.classList.add("hidden");
-  
+
       await startLocalStream();
       createPeerConnection();
       addLocalTracks();
-  
-      await peerConnection.setRemoteDescription(new RTCSessionDescription(remoteOffer));
 
-  
+      // ✅ Correct: Use the offer from WebSocket data
+      await peerConnection.setRemoteDescription(new RTCSessionDescription(data.offer));
+
       const answer = await peerConnection.createAnswer();
       await peerConnection.setLocalDescription(answer);
-  
+
       socket.send(JSON.stringify({
         type: "call-answer",
         from: username,
         to: data.from,
         answer: answer
       }));
-  
+
       videoPopup.classList.remove("hidden");
     };
-  
+
     declineCallBtn.onclick = () => {
       incomingCallPopup.classList.add("hidden");
       socket.send(JSON.stringify({ type: "call-declined", from: username, to: data.from }));
     };
   }
-  
 
   else if (data.type === "call-answer") {
+    // ✅ When caller receives the answer, set it as remote description
     await peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
   }
 
@@ -228,6 +173,7 @@ async function handleSocketMessage(event) {
     }
   }
 }
+
 
 
 
