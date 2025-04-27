@@ -7,14 +7,17 @@ let peerConnection;
 
 const configuration = {
   iceServers: [
-    { urls: "stun:stun.l.google.com:19302" },
     {
-      urls: "turn:openrelay.metered.ca:80",
-      username: "openrelayproject",
-      credential: "openrelayproject"
+      urls: 'stun:stun.l.google.com:19302' // Public free STUN server
+    },
+    {
+      urls: 'turn:59.152.80.69:3478',   // 👈 Your TURN server hosted by yourself
+      username: 'testuser',             // 👈 Username (you set inside turnserver.conf)
+      credential: 'testpass'            // 👈 Password (you set inside turnserver.conf)
     }
   ]
 };
+
 
 
 // 🟰 VERY IMPORTANT 🟰
