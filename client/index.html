@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat X</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* OPTIONAL DEBUG ENHANCEMENTS */
+    #incoming-call-popup {
+      z-index: 9999 !important;
+      background-color: rgba(0, 0, 0, 0.9); /* translucent black */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header -->
+  <div class="header">
+    <div class="logo">Chat X</div>
+    <div class="welcome">Welcome, <span id="user-greeting">User</span></div>
+  </div>
+
+  <!-- Main Chat Layout -->
+  <div class="chat-wrapper">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <input type="text" id="user-search" placeholder="Search users..." />
+      <div id="user-items-container"></div>
+    </div>
+
+    <!-- Main Chat Section -->
+    <div class="chat-area">
+
+      <!-- Chat Header -->
+      <div class="chat-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span id="chat-title">Select a user to chat</span>
+          <span id="live-emoji" style="font-size: 1.5rem;">😐</span>
+        </div>
+        <div class="chat-controls">
+          <button id="call-btn" title="Call 📞">📞</button>
+        </div>
+        <span class="status-indicator"></span>
+      </div>
+
+      <!-- Scrollable Chat Messages -->
+      <div class="chat-box" id="chat-box"></div>
+
+      <!-- Typing Indicator -->
+      <div class="typing-indicator" id="typing-indicator"></div>
+
+      <!-- Fixed Input -->
+      <div class="message-input">
+        <input type="text" id="message" placeholder="Type a message..." />
+        <button id="emoji-btn">😊</button>
+        <button id="attachment-btn">📎</button>
+        <button id="send-btn">Send</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Message Templates -->
+  <!-- Sent Message Template -->
+  <template id="message-template-sent">
+    <div class="message sent">
+      <div class="bubble">
+        You: <span class="content"></span>
+        <button class="summarize-btn" style="display: none;"></button>
+      </div>
+      <div class="meta"></div>
+    </div>
+  </template>
+
+  <!-- Received Message Template -->
+  <template id="message-template-received">
+    <div class="message received">
+      <div class="bubble">
+        <span class="sender"></span>: <span class="content"></span>
+        <button class="summarize-btn" style="display: none;">Summarize</button>
+      </div>
+      <div class="meta"></div>
+    </div>
+  </template>
+
+
+  <!-- Video Call Popup -->
+  <div id="video-popup" class="video-popup hidden">
+    <div class="video-box">
+      <video id="remote-video" autoplay playsinline></video>
+      <video id="local-video" autoplay muted playsinline></video>
+      <div class="call-controls">
+        <button id="mute-btn">🔇</button>
+        <button id="camera-btn">📷</button>
+        <button id="end-call-btn" class="end-call">❌</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Incoming Call UI -->
+  <div id="incoming-call-popup" class="video-popup hidden">
+    <div class="video-box" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+      <p id="incoming-call-text" style="color: white; margin-bottom: 10px; text-align: center;">Incoming call...</p>
+      <div class="call-controls">
+        <button id="accept-call-btn">✅ Accept</button>
+        <button id="decline-call-btn">❌ Decline</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/script.js"></script>
+</body>
+</html>

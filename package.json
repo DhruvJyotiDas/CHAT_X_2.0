@@ -1,0 +1,32 @@
+{
+  "name": "chat-x",
+  "version": "1.0.0",
+  "description": "Chat X Application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "client": "cd client && npm start",
+    "install-all": "npm install && cd client && npm install"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dns": "^0.2.2",
+    "express": "^4.21.2",
+    "http-proxy-middleware": "^3.0.5",
+    "i": "^0.3.7",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^6.15.0",
+    "mongoose": "^8.13.2",
+    "npm": "^11.2.0",
+    "pg": "^8.14.1",
+    "semver": "^7.7.1",
+    "sentiment": "^5.0.2",
+    "sqlite3": "^5.1.7",
+    "ws": "^8.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  }
+}
