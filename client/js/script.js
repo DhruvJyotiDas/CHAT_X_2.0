@@ -7,16 +7,16 @@ let peerConnection;
 
 const configuration = {
   iceServers: [
-    { urls: 'stun:stun.l.google.com:19302' },
     {
-      urls: 'turn:157.51.144.80:3478',
-      username: 'testuser',
-      credential: 'testpass'
+      urls: 'stun:stun.l.google.com:19302'
+    },
+    {
+      urls: 'turn:140.238.50.75:3478',   // <<< Update here
+      username: 'testuser',              // <<< Keep same
+      credential: 'testpass'             // <<< Keep same
     }
   ]
 };
-
-
 
 
 // 🟰 VERY IMPORTANT 🟰
