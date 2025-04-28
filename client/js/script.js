@@ -177,12 +177,17 @@ async function handleSocketMessage(event) {
   }
 
   else if (data.type === "call-candidate") {
-    try {
-      await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
-    } catch (err) {
-      console.error("Error adding ICE candidate:", err);
+    if (peerConnection) {   // 🛠 ADD THIS SAFE CHECK
+      try {
+        await peerConnection.addIceCandidate(new RTCIceCandidate(data.candidate));
+      } catch (err) {
+        console.error("Error adding ICE candidate:", err);
+      }
+    } else {
+      console.warn("Received ICE candidate, but no peerConnection yet.");
     }
-  }
+}
+
 }
 
 async function summarizeMessage(originalText) {
