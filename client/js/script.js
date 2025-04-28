@@ -7,16 +7,15 @@ let peerConnection;
 
 const configuration = {
   iceServers: [
+    { urls: 'stun:stun.l.google.com:19302' },
     {
-      urls: 'stun:stun.l.google.com:19302' // Public free STUN server
-    },
-    {
-      urls: 'turn:59.152.80.69:3478',   // 👈 Your TURN server hosted by yourself
-      username: 'testuser',             // 👈 Username (you set inside turnserver.conf)
-      credential: 'testpass'            // 👈 Password (you set inside turnserver.conf)
+      urls: 'turn:157.51.144.80:3478',
+      username: 'testuser',
+      credential: 'testpass'
     }
   ]
 };
+
 
 
 
