@@ -16,9 +16,10 @@ const { createProxyMiddleware } = require('http-proxy-middleware'); // 🔁 NEW:
 
 // 🔁 Add this proxy to forward /summarize requests to FastAPI backend
 app.use('/summarize', createProxyMiddleware({
-  target: 'http://127.0.0.1:4040',
+  target: 'https://c1e1-2401-4900-634f-1e7e-75c4-f53-706e-7177.ngrok-free.app',
   changeOrigin: true,
 }));
+
 
 mongoose.connect("mongodb+srv://admin:admin@cluster0.zzinnu7.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", { family: 4 })
   .then(() => console.log("✅ MongoDB Connected"))
