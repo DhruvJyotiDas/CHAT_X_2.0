@@ -16,7 +16,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware'); // 🔁 NEW:
 
 // 🔁 Add this proxy to forward /summarize requests to FastAPI backend
 app.use('/summarize', createProxyMiddleware({
-  target: 'http://192.168.149.167:8001',
+  target: 'http://127.0.0.1:4040',
   changeOrigin: true,
 }));
 
