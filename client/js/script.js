@@ -192,7 +192,7 @@ async function handleSocketMessage(event) {
 
 async function summarizeMessage(originalText) {
   try {
-    const res = await fetch("https://f686-2401-4900-634f-e92e-4924-7f86-639a-3db8.ngrok-free.app/summarize", {  // ✅ No change yet
+    const res = await fetch("https://145b-2401-4900-634f-1e7e-75c4-f53-706e-7177.ngrok-free.app/summarize", {  // ✅ No change yet
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: originalText }),
