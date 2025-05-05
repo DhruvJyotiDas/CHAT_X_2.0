@@ -16,7 +16,7 @@ const { createProxyMiddleware } = require('http-proxy-middleware'); // 🔁 NEW:
 
 // 🔁 Add this proxy to forward /summarize requests to FastAPI backend
 app.use('/summarize', createProxyMiddleware({
-  target: 'https://145b-2401-4900-634f-1e7e-75c4-f53-706e-7177.ngrok-free.app',
+  target: '   https://6bd9-2401-4900-634f-1e7e-75c4-f53-706e-7177.ngrok-free.app',
   changeOrigin: true,
 }));
 
